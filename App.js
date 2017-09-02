@@ -4,6 +4,7 @@ import diceSets from './diceSets.js';
 // import SquareGrid from "react-native-square-grid";
 // import LinearGradient from 'react-native-linear-gradient';
 import { genBoard } from './boghog';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 const diceSetTitles = Object.keys(diceSets);
 const {height, width} = Dimensions.get('window');
@@ -27,7 +28,7 @@ export default class App extends React.Component {
     this.setState({board: genBoard(diceSets[this.state.diceSetTitle])})
   }
 
-  _onSelectGameType(itemValue, itemIndex) {
+  _onSelectGameType(itemIndex, itemValue) {
     console.log(itemValue, itemIndex, 'yeppp');
     this.setState({diceSetTitle: itemValue, board: genBoard(diceSets[itemValue])})
   }
@@ -37,11 +38,15 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <StatusBar hidden={true} />
         <View style={styles.header}>
-          <Picker style={styles.gamePicker}
-            selectedValue={this.state.diceSetTitle}
-            onValueChange={this._onSelectGameType}>
-            {diceSetTitles.map(title => <Picker.Item key={title} label={title} value={title} />)}
-          </Picker>
+          <ModalDropdown defaultIndex={0}
+                         defaultValue={this.state.diceSetTitle}
+                         onSelect={this._onSelectGameType} 
+                         style={{borderRadius:20, backgroundColor:'white', width:250, height:40 }}
+                         textStyle={{ fontSize:30, textAlign:'center', lineHeight:40}} 
+                         dropdownStyle={{width:220, height: 47.5*6, marginTop:-22, marginLeft: 15}} 
+                         dropdownTextStyle={{fontSize:20, textAlign:'center'}}
+                         options={diceSetTitles}/>
+          <Text style={styles.shuffleText} onPress={this._onShuffleGame}>Shuffle</Text>
         </View>
         <View style={styles.midSquare}>
           {this.state.board.map((row, ir) => (
@@ -54,9 +59,7 @@ export default class App extends React.Component {
             </View>
             ))}
         </View>
-        <View style={styles.footer}>
-          <Text style={styles.shuffleText} onPress={this._onShuffleGame}>Shuffle Board</Text>
-        </View>
+        <View style={styles.footer}></View>
       </View>
     );
   }
@@ -72,16 +75,19 @@ const styles = StyleSheet.create({
   header:{
     flex: 1,
     width: '100%',
-    backgroundColor: 'red',
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    backgroundColor: '#225',
+    marginBottom: 0
   },
   footer: {
     flex: 1,
     width: '100%',
-    backgroundColor: 'green',
+    backgroundColor: '#225',
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    flexDirection: 'row',
   },
   gamePicker: {
     width: 200,
@@ -90,9 +96,10 @@ const styles = StyleSheet.create({
     backgroundColor:'yellow'
   },
   shuffleText: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'purple',
+    padding: 10,
+    borderRadius: 20,
+    height: 40,
+    backgroundColor: '#3396E6',
     color: 'white',
     textAlign: 'center',
   },
@@ -112,7 +119,7 @@ const styles = StyleSheet.create({
   midSquare: {
     width: squareSide-10,
     height: squareSide-10,
-    // backgroundColor: 'lightblue',
+    backgroundColor: '#477',
     flexDirection: 'column',
     justifyContent: 'space-between',
     margin: 5,
