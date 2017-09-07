@@ -5,6 +5,7 @@ import diceSets from './diceSets.js';
 // import LinearGradient from 'react-native-linear-gradient';
 import { genBoard } from './boghog';
 import ModalDropdown from 'react-native-modal-dropdown';
+import CountDown from './CountDown';
 
 const diceSetTitles = Object.keys(diceSets);
 const {height, width} = Dimensions.get('window');
@@ -59,7 +60,16 @@ export default class App extends React.Component {
             </View>
             ))}
         </View>
-        <View style={styles.footer}></View>
+        <View style={styles.footer}>
+          <CountDown
+            // onPress={this.sendAgain} //default null
+            text={''} //default ''
+            time={10} //default 60
+            buttonStyle={{padding:20}}
+            textStyle={{color:'black'}} //default black
+            disabledTextStyle={{color:'gray'}} //default gray
+          />
+        </View>
       </View>
     );
   }
